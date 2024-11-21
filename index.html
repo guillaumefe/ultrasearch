@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra Search</title>
+    <style>
+        :root {
+            --gradient-1: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            --gradient-2: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #333;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --hover-color: #4ECDC4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--gradient-2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            color: var(--text-color);
+        }
+
+        .container, .links-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--hover-color);
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+        }
+
+        optgroup {
+            font-weight: 600;
+        }
+
+        option {
+            padding: 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--gradient-1);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .links-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .links-container li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .links-container li:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateX(5px);
+        }
+
+        .links-container a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+        }
+
+        .links-container a:hover {
+            color: var(--hover-color);
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .popup-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        textarea {
+            height: 200px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container, .links-container {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .popup-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .popup-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .container, .links-container {
+                padding: 1rem;
+            }
+
+            select, input, textarea {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<!-- Le reste du HTML et JavaScript reste identique -->
+<body>
+    <div class="container">
+        <h1>Ultra Search</h1>
+        <form id="search-form">
+            <div class="form-group">
+                <label for="query">Type de recherche</label>
+                <select name="query" id="query" required>
+                    <option value="" disabled selected>Sélectionnez une option</option>
+                    <option value='+("{target}" AND "CVE")'>Vulnérabilités (CVE)</option>
+                    <option value='+("{target}" AND "critical exploit")'>Exploits critiques</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="target">Cible de recherche</label>
+                <input type="text" id="target" name="target" placeholder="Entrez votre cible..." required>
+            </div>
+
+            <div class="actions">
+                <button type="submit">Rechercher</button>
+                <button type="button" id="export-config">Exporter Config</button>
+                <button type="button" id="import-config">Importer Config</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="links-container">
+        <h2>Historique des recherches</h2>
+        <ul id="links-list"></ul>
+    </div>
+
+    <div class="popup" id="import-method-popup">
+        <div class="popup-content">
+            <h2>Choisir le mode d'importation</h2>
+            <div class="popup-actions">
+                <button id="import-file-button">Fichier JSON</button>
+                <button id="import-text-button">Copier/Coller JSON</button>
+            </div>
+            <button id="import-cancel-method" style="margin-top: 1rem; width: 100%;">Annuler</button>
+        </div>
+    </div>
+
+    <div class="popup" id="import-text-popup">
+        <div class="popup-content">
+            <h2>Importer la configuration</h2>
+            <textarea id="import-textarea" placeholder="Collez ici votre configuration JSON..."></textarea>
+            <div class="popup-actions">
+                <button id="import-validate">Importer</button>
+                <button id="import-cancel-text">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="import-file" style="display: none;" accept=".json">
+
+    <script>
+        const linksList = document.getElementById("links-list");
+        const importConfigButton = document.getElementById("import-config");
+        const importMethodPopup = document.getElementById("import-method-popup");
+        const importTextPopup = document.getElementById("import-text-popup");
+        const importFileButton = document.getElementById("import-file-button");
+        const importTextButton = document.getElementById("import-text-button");
+        const importFile = document.getElementById("import-file");
+        const importTextarea = document.getElementById("import-textarea");
+        const importValidate = document.getElementById("import-validate");
+        const querySelect = document.getElementById("query");
+
+        function populateSelect(dorksList) {
+            querySelect.innerHTML = '<option value="" disabled selected>Sélectionnez une option</option>';
+            
+            dorksList.forEach(category => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = category.category;
+                
+                category.dorks.forEach(dork => {
+                    const option = document.createElement('option');
+                    option.value = dork.value;
+                    option.textContent = dork.label;
+                    optgroup.appendChild(option);
+                });
+                
+                querySelect.appendChild(optgroup);
+            });
+        }
+
+        function injectTargetIntoDork(dork, target) {
+            return dork.replace(/{target}/g, target);
+        }
+
+        function addLink(label, url) {
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = url;
+            a.textContent = label;
+            a.target = "_blank";
+            li.appendChild(a);
+            linksList.appendChild(li);
+            saveToLocalStorage();
+        }
+
+        function saveToLocalStorage() {
+            const links = Array.from(linksList.getElementsByTagName("a")).map(a => ({
+                label: a.textContent,
+                url: a.href
+            }));
+            localStorage.setItem('searchHistory', JSON.stringify(links));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('searchHistory');
+            if (saved) {
+                const links = JSON.parse(saved);
+                links.forEach(link => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = link.url;
+                    a.textContent = link.label;
+                    a.target = "_blank";
+                    li.appendChild(a);
+                    linksList.appendChild(li);
+                });
+            }
+        }
+
+        document.getElementById("search-form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const query = querySelect.value;
+            const target = document.getElementById("target").value;
+
+            if (!query || !target) {
+                alert("Veuillez sélectionner une option et entrer une cible.");
+                return;
+            }
+
+            const finalQuery = injectTargetIntoDork(query, target);
+            const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
+            
+            // Correction : Obtenir le texte de l'option sélectionnée sans utiliser querySelector
+            const selectedOptionText = querySelect.options[querySelect.selectedIndex].textContent;
+            const label = `Recherche: ${target} - ${selectedOptionText}`;
+
+            addLink(label, searchURL);
+            window.open(searchURL, "_blank");
+        });
+
+        importConfigButton.addEventListener("click", () => {
+            importMethodPopup.style.display = "flex";
+        });
+
+        document.getElementById("import-cancel-method").addEventListener("click", () => {
+            importMethodPopup.style.display = "none";
+        });
+
+        document.getElementById("import-cancel-text").addEventListener("click", () => {
+            importTextPopup.style.display = "none";
+            importTextarea.value = "";
+        });
+
+        importFileButton.addEventListener("click", () => {
+            importMethodPopup.style.display = "none";
+            importFile.click();
+        });
+
+        importTextButton.addEventListener("click", () => {
+            importMethodPopup.style.display = "none";
+            importTextPopup.style.display = "flex";
+        });
+
+        function processImport(importedData) {
+            try {
+                const dorksList = JSON.parse(importedData);
+                if (!Array.isArray(dorksList)) {
+                    throw new Error("Format invalide");
+                }
+                populateSelect(dorksList);
+                alert("Configuration importée avec succès");
+            } catch (error) {
+                alert("Erreur : JSON invalide");
+                console.error(error);
+            }
+        }
+
+        importFile.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => processImport(e.target.result);
+            reader.readAsText(file);
+        });
+
+        importValidate.addEventListener("click", () => {
+            const importData = importTextarea.value;
+            if (!importData.trim()) {
+                alert("Veuillez entrer des données JSON");
+                return;
+            }
+            
+            processImport(importData);
+            importTextPopup.style.display = "none";
+            importTextarea.value = "";
+        });
+
+        document.getElementById("export-config").addEventListener("click", () => {
+            const options = Array.from(querySelect.getElementsByTagName('option'))
+                .filter(opt => opt.value)
+                .map(opt => ({
+                    label: opt.textContent,
+                    value: opt.value
+                }));
+            
+            const config = [
+                {
+                    category: "Dorks exportés",
+                    dorks: options
+                }
+            ];
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "dorks-config.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Charger l'historique au chargement de la page
+        window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
+    </script>
+</body>
+</html>
