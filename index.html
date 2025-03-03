@@ -394,8 +394,13 @@
                 
                 category.dorks.forEach(dork => {
                     const option = document.createElement('option');
-                    option.value = dork.value;
                     option.textContent = dork.label;
+                    // Convertir la valeur en tableau si ce n'est pas déjà un tableau
+                    const values = Array.isArray(dork.value) ? dork.value : [dork.value];
+                    // Stocker le tableau sous forme JSON dans data-values
+                    option.dataset.values = JSON.stringify(values);
+                    // Vous pouvez utiliser l'attribut value pour un identifiant ou autre usage
+                    option.value = dork.label;
                     optgroup.appendChild(option);
                 });
                 
@@ -403,6 +408,7 @@
             });
             saveToLocalStorage();
         }
+
 
         function injectTargetIntoDork(dork, target) {
             return dork.replace(/{target}/g, target);
@@ -430,55 +436,72 @@
         }
 
         function saveToLocalStorage() {
+            // Sauvegarde de l'historique des liens
             const links = Array.from(linksList.getElementsByTagName("a")).map(a => ({
                 label: a.textContent,
                 url: a.href
             }));
-            
+        
+            // Sauvegarde des dorks en récupérant data-values pour être sûr d'avoir un tableau
             const dorks = Array.from(querySelect.options)
-                .filter(opt => opt.value)
+                .filter(opt => opt.dataset.values) // on ne prend que les options avec des dorks
                 .map(opt => ({
                     label: opt.textContent,
-                    value: opt.value
+                    value: (() => {
+                        try {
+                            return JSON.parse(opt.dataset.values);
+                        } catch (error) {
+                            // En cas d'erreur, on encapsule la valeur dans un tableau
+                            return [opt.dataset.values];
+                        }
+                    })()
                 }));
-            
+        
             localStorage.setItem('searchHistory', JSON.stringify(links));
             localStorage.setItem('dorksList', JSON.stringify(dorks));
         }
-
+        
         function loadFromLocalStorage() {
             const savedLinks = localStorage.getItem('searchHistory');
             const savedDorks = localStorage.getItem('dorksList');
-            
+        
             if (savedLinks) {
                 const links = JSON.parse(savedLinks);
+                linksList.innerHTML = ""; // Réinitialiser la liste
                 links.forEach(link => addLink(link.label, link.url));
             }
-            
+        
             if (savedDorks) {
                 const dorks = JSON.parse(savedDorks);
+                // On encapsule dans un groupe avec une catégorie par défaut
                 populateSelect([{ category: "Dorks sauvegardés", dorks }]);
             }
         }
 
+
         document.getElementById("search-form").addEventListener("submit", (event) => {
             event.preventDefault();
-            const query = querySelect.value;
-            const target = document.getElementById("target").value;
-
-            if (!query || !target) {
-                alert("Veuillez sélectionner une option et entrer une cible.");
-                return;
+            const selectedOption = querySelect.options[querySelect.selectedIndex];
+            
+            // Récupération et parsing du dataset
+            let values;
+            try {
+                values = JSON.parse(selectedOption.dataset.values);
+            } catch (error) {
+                // En cas d'erreur, on encapsule la valeur dans un tableau
+                values = [selectedOption.dataset.values];
             }
-
-            const finalQuery = injectTargetIntoDork(query, target);
-            const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
-            const selectedOptionText = querySelect.options[querySelect.selectedIndex].textContent;
-            const label = `Recherche: ${target} - ${selectedOptionText}`;
-
-            addLink(label, searchURL);
-            window.open(searchURL, "_blank");
+            
+            const target = document.getElementById("target").value;
+            
+            // Itération sur toutes les valeurs pour lancer les recherches
+            values.forEach(value => {
+                const finalQuery = injectTargetIntoDork(value, target);
+                const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
+                window.open(searchURL, "_blank");
+            });
         });
+
 
         importConfigButton.addEventListener("click", () => {
             importMethodPopup.style.display = "flex";
@@ -505,9 +528,10 @@
 
         function processImport(importedData) {
             try {
-                const dorksList = JSON.parse(importedData);
+                let dorksList = JSON.parse(importedData);
+                // Si ce n'est pas un tableau, on encapsule l'objet dans un tableau
                 if (!Array.isArray(dorksList)) {
-                    throw new Error("Format invalide");
+                    dorksList = [dorksList];
                 }
                 populateSelect(dorksList);
                 alert("Configuration importée avec succès");
