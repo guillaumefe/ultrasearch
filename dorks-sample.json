@@ -137,10 +137,6 @@
         "value": "inurl:{target} filetype:sql OR filetype:db"
       },
       {
-        "label": "Inclusion de fichiers locaux (LFI)",
-        "value": "\"{target}\" \"lfi\""
-      },
-      {
         "label": "Fichiers wp-config.php exposés",
         "value": "\"{target}\" \"wp-config.php\""
       },
