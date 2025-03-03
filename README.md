@@ -1,0 +1,182 @@
+## You can use this JSON configuration file
+*You may want to do your own*
+
+```
+[
+  {
+    "category": "Informations Générales",
+    "dorks": [
+      {
+        "label": "Occurrences exactes de \"{target}\"",
+        "value": "+(\"{target}\" AND \"{target}\")"
+      },
+      {
+        "label": "Résultats contenant \"{target}\"",
+        "value": "+\"{target}\""
+      }
+    ]
+  },
+  {
+    "category": "Réseaux Sociaux",
+    "dorks": [
+      {
+        "label": "Résultats sur Facebook",
+        "value": "site:facebook.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Twitter",
+        "value": "site:twitter.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur LinkedIn",
+        "value": "site:linkedin.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Instagram",
+        "value": "site:instagram.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur VK",
+        "value": "site:vk.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Weibo",
+        "value": "site:weibo.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Tumblr",
+        "value": "site:tumblr.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Snapchat",
+        "value": "site:snapchat.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Discord",
+        "value": "site:discord.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Telegram",
+        "value": "site:telegram.org \"{target}\""
+      },
+      {
+        "label": "Résultats sur Quora",
+        "value": "site:quora.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Medium",
+        "value": "site:medium.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Clubhouse",
+        "value": "site:clubhouse.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Threads",
+        "value": "site:threads.net \"{target}\""
+      },
+      {
+        "label": "Résultats sur Reddit",
+        "value": "site:reddit.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur Pinterest",
+        "value": "site:pinterest.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur TikTok",
+        "value": "site:tiktok.com \"{target}\""
+      },
+      {
+        "label": "Résultats sur YouTube",
+        "value": "site:youtube.com \"{target}\""
+      }
+    ]
+  },
+  {
+    "category": "Vulnérabilités et Failles de Sécurité",
+    "dorks": [
+      {
+        "label": "Vulnérabilités signalées sur HackerOne",
+        "value": "site:hackerone.com \"{target}\""
+      },
+      {
+        "label": "Vulnérabilités signalées sur BugCrowd",
+        "value": "site:bugcrowd.com \"{target}\""
+      },
+      {
+        "label": "Vulnérabilités signalées sur OpenBugBounty",
+        "value": "site:openbugbounty.org \"{target}\""
+      },
+      {
+        "label": "Injections SQL",
+        "value": "\"{target}\" \"sql injection\""
+      },
+      {
+        "label": "XSS",
+        "value": "\"{target}\" \"xss\""
+      },
+      {
+        "label": "Exécution de code à distance",
+        "value": "\"{target}\" \"rce\""
+      },
+      {
+        "label": "CSRF",
+        "value": "\"{target}\" \"csrf\""
+      },
+      {
+        "label": "Traversées de répertoire",
+        "value": "\"{target}\" \"directory traversal\""
+      },
+      {
+        "label": "Désérialisation vulnérable",
+        "value": "\"{target}\" \"deserialization vulnerability\""
+      },
+      {
+        "label": "Exploits sur Exploit-DB",
+        "value": "site:exploit-db.com \"{target}\""
+      },
+      {
+        "label": "Fuites de données sur Pastebin",
+        "value": "site:pastebin.com \"{target}\" \"password\" OR \"leak\""
+      },
+      {
+        "label": "CVE sur le NVD",
+        "value": "site:nvd.nist.gov \"{target}\""
+      },
+      {
+        "label": "Analyse Shodan",
+        "value": "site:shodan.io \"{target}\""
+      },
+      {
+        "label": "Analyse Censys",
+        "value": "site:censys.io \"{target}\""
+      },
+      {
+        "label": "Fichiers de configuration exposés",
+        "value": "inurl:{target} filetype:env OR filetype:cfg"
+      },
+      {
+        "label": "Fichiers de sauvegarde exposés",
+        "value": "inurl:{target} \"backup\" OR \"backup.zip\""
+      },
+      {
+        "label": "Bases de données exposées",
+        "value": "inurl:{target} filetype:sql OR filetype:db"
+      },
+      {
+        "label": "Inclusion de fichiers locaux (LFI)",
+        "value": "\"{target}\" \"lfi\""
+      },
+      {
+        "label": "Fichiers wp-config.php exposés",
+        "value": "\"{target}\" \"wp-config.php\""
+      },
+      {
+        "label": "Messages d'erreur visibles",
+        "value": "inurl:{target} \"error\" OR \"exception\""
+      }
+    ]
+  }
+]
+```
