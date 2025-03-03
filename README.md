@@ -28,3 +28,5 @@
   }
 ]
 ```
+
+*To start somewhere "dorks-sample.json" is available in source code.*
