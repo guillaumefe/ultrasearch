@@ -1,5 +1,8 @@
 ## Structure for the JSON configuration file
 
+
+Use the keyword **{target}** to mark where you want the given keyword to appear
+
 ```
 [
     {
@@ -7,11 +10,11 @@
         "dorks": [
             {
                 "label": "My dork name",
-                "value": "Put the dork here"
+                "value": "Put the dork for {target} here"
             },
             {
-                "label": "Another dork name",
-                "value": "another dork here"
+                "label": "Another {target} dork name",
+                "value": "another dork here {target}"
             }
         ]
     },
@@ -21,15 +24,15 @@
             {
                 "label": "My dork name",
                 "value": [
-                    "Put a dork here",
-                    "Put a second dork here",
-                    "Put another dork here"
+                    "Put a dork here against {target}",
+                    "{target} a second dork here",
+                    "Put {target} dork here"
                 ]
             },
             {
                 "label": "My dork name",
                 "value": [
-                    "Put a dork here"
+                    "Put a {target} here"
                 ]
             }
         ]
