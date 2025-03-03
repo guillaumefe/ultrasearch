@@ -4,112 +4,112 @@
 ```
 [
   {
-    "category": "Informations Générales",
+    "category": "General Information",
     "dorks": [
       {
-        "label": "Occurrences exactes de \"{target}\"",
+        "label": "Exact occurrences of \"{target}\"",
         "value": "+(\"{target}\" AND \"{target}\")"
       },
       {
-        "label": "Résultats contenant \"{target}\"",
+        "label": "Results containing \"{target}\"",
         "value": "+\"{target}\""
       }
     ]
   },
   {
-    "category": "Réseaux Sociaux",
+    "category": "Social Media",
     "dorks": [
       {
-        "label": "Résultats sur Facebook",
+        "label": "Results on Facebook",
         "value": "site:facebook.com \"{target}\""
       },
       {
-        "label": "Résultats sur Twitter",
+        "label": "Results on Twitter",
         "value": "site:twitter.com \"{target}\""
       },
       {
-        "label": "Résultats sur LinkedIn",
+        "label": "Results on LinkedIn",
         "value": "site:linkedin.com \"{target}\""
       },
       {
-        "label": "Résultats sur Instagram",
+        "label": "Results on Instagram",
         "value": "site:instagram.com \"{target}\""
       },
       {
-        "label": "Résultats sur VK",
+        "label": "Results on VK",
         "value": "site:vk.com \"{target}\""
       },
       {
-        "label": "Résultats sur Weibo",
+        "label": "Results on Weibo",
         "value": "site:weibo.com \"{target}\""
       },
       {
-        "label": "Résultats sur Tumblr",
+        "label": "Results on Tumblr",
         "value": "site:tumblr.com \"{target}\""
       },
       {
-        "label": "Résultats sur Snapchat",
+        "label": "Results on Snapchat",
         "value": "site:snapchat.com \"{target}\""
       },
       {
-        "label": "Résultats sur Discord",
+        "label": "Results on Discord",
         "value": "site:discord.com \"{target}\""
       },
       {
-        "label": "Résultats sur Telegram",
+        "label": "Results on Telegram",
         "value": "site:telegram.org \"{target}\""
       },
       {
-        "label": "Résultats sur Quora",
+        "label": "Results on Quora",
         "value": "site:quora.com \"{target}\""
       },
       {
-        "label": "Résultats sur Medium",
+        "label": "Results on Medium",
         "value": "site:medium.com \"{target}\""
       },
       {
-        "label": "Résultats sur Clubhouse",
+        "label": "Results on Clubhouse",
         "value": "site:clubhouse.com \"{target}\""
       },
       {
-        "label": "Résultats sur Threads",
+        "label": "Results on Threads",
         "value": "site:threads.net \"{target}\""
       },
       {
-        "label": "Résultats sur Reddit",
+        "label": "Results on Reddit",
         "value": "site:reddit.com \"{target}\""
       },
       {
-        "label": "Résultats sur Pinterest",
+        "label": "Results on Pinterest",
         "value": "site:pinterest.com \"{target}\""
       },
       {
-        "label": "Résultats sur TikTok",
+        "label": "Results on TikTok",
         "value": "site:tiktok.com \"{target}\""
       },
       {
-        "label": "Résultats sur YouTube",
+        "label": "Results on YouTube",
         "value": "site:youtube.com \"{target}\""
       }
     ]
   },
   {
-    "category": "Vulnérabilités et Failles de Sécurité",
+    "category": "Vulnerabilities and Security Flaws",
     "dorks": [
       {
-        "label": "Vulnérabilités signalées sur HackerOne",
+        "label": "Vulnerabilities reported on HackerOne",
         "value": "site:hackerone.com \"{target}\""
       },
       {
-        "label": "Vulnérabilités signalées sur BugCrowd",
+        "label": "Vulnerabilities reported on BugCrowd",
         "value": "site:bugcrowd.com \"{target}\""
       },
       {
-        "label": "Vulnérabilités signalées sur OpenBugBounty",
+        "label": "Vulnerabilities reported on OpenBugBounty",
         "value": "site:openbugbounty.org \"{target}\""
       },
       {
-        "label": "Injections SQL",
+        "label": "SQL Injections",
         "value": "\"{target}\" \"sql injection\""
       },
       {
@@ -117,7 +117,7 @@
         "value": "\"{target}\" \"xss\""
       },
       {
-        "label": "Exécution de code à distance",
+        "label": "Remote Code Execution",
         "value": "\"{target}\" \"rce\""
       },
       {
@@ -125,55 +125,55 @@
         "value": "\"{target}\" \"csrf\""
       },
       {
-        "label": "Traversées de répertoire",
+        "label": "Directory Traversal",
         "value": "\"{target}\" \"directory traversal\""
       },
       {
-        "label": "Désérialisation vulnérable",
+        "label": "Vulnerable Deserialization",
         "value": "\"{target}\" \"deserialization vulnerability\""
       },
       {
-        "label": "Exploits sur Exploit-DB",
+        "label": "Exploits on Exploit-DB",
         "value": "site:exploit-db.com \"{target}\""
       },
       {
-        "label": "Fuites de données sur Pastebin",
+        "label": "Data leaks on Pastebin",
         "value": "site:pastebin.com \"{target}\" \"password\" OR \"leak\""
       },
       {
-        "label": "CVE sur le NVD",
+        "label": "CVE on NVD",
         "value": "site:nvd.nist.gov \"{target}\""
       },
       {
-        "label": "Analyse Shodan",
+        "label": "Shodan Analysis",
         "value": "site:shodan.io \"{target}\""
       },
       {
-        "label": "Analyse Censys",
+        "label": "Censys Analysis",
         "value": "site:censys.io \"{target}\""
       },
       {
-        "label": "Fichiers de configuration exposés",
+        "label": "Exposed configuration files",
         "value": "inurl:{target} filetype:env OR filetype:cfg"
       },
       {
-        "label": "Fichiers de sauvegarde exposés",
+        "label": "Exposed backup files",
         "value": "inurl:{target} \"backup\" OR \"backup.zip\""
       },
       {
-        "label": "Bases de données exposées",
+        "label": "Exposed databases",
         "value": "inurl:{target} filetype:sql OR filetype:db"
       },
       {
-        "label": "Inclusion de fichiers locaux (LFI)",
+        "label": "Local File Inclusion (LFI)",
         "value": "\"{target}\" \"lfi\""
       },
       {
-        "label": "Fichiers wp-config.php exposés",
+        "label": "Exposed wp-config.php files",
         "value": "\"{target}\" \"wp-config.php\""
       },
       {
-        "label": "Messages d'erreur visibles",
+        "label": "Visible error messages",
         "value": "inurl:{target} \"error\" OR \"exception\""
       }
     ]
