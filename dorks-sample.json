@@ -105,30 +105,6 @@
         "value": "site:openbugbounty.org \"{target}\""
       },
       {
-        "label": "Injections SQL",
-        "value": "\"{target}\" \"sql injection\""
-      },
-      {
-        "label": "XSS",
-        "value": "\"{target}\" \"xss\""
-      },
-      {
-        "label": "Exécution de code à distance",
-        "value": "\"{target}\" \"rce\""
-      },
-      {
-        "label": "CSRF",
-        "value": "\"{target}\" \"csrf\""
-      },
-      {
-        "label": "Traversées de répertoire",
-        "value": "\"{target}\" \"directory traversal\""
-      },
-      {
-        "label": "Désérialisation vulnérable",
-        "value": "\"{target}\" \"deserialization vulnerability\""
-      },
-      {
         "label": "Exploits sur Exploit-DB",
         "value": "site:exploit-db.com \"{target}\""
       },
