@@ -341,7 +341,7 @@
                   <select id="single-value-select"></select>
                 </div>
 
-                <input type="text" id="target" name="target" placeholder="Entrez votre cible..." required>
+                <input type="text" id="target" name="target" placeholder="Entrez votre cible...">
             </div>
 
             <div class="actions">
@@ -445,7 +445,7 @@
 
 
         function injectTargetIntoDork(dork, target) {
-            return dork.replace(/{target}/g, target);
+            return dork.replace(/{target}/g, target || '""');
         }
 
         function addLink(label, url) {
