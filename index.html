@@ -448,7 +448,7 @@
             return dork.replace(/{target}/g, target || '""');
         }
 
-        function addLink(label, url) {
+        function addLink(label, url, query) {
             const li = document.createElement("li");
             const a = document.createElement("a");
             const options = document.createElement("div");
@@ -456,6 +456,10 @@
             a.href = url;
             a.textContent = label;
             a.target = "_blank";
+            // On affecte l'infobulle avec la requête exacte
+            if(query) {
+              a.title = query;
+            }
             
             options.className = "link-options";
             options.innerHTML = `
@@ -469,28 +473,29 @@
             saveToLocalStorage();
         }
 
+
         function saveToLocalStorage() {
             // Sauvegarde de l'historique des liens
             const links = Array.from(linksList.getElementsByTagName("a")).map(a => ({
                 label: a.textContent,
-                url: a.href
+                url: a.href,
+                query: a.getAttribute("title") || ""
             }));
-        
-            // Sauvegarde des dorks en récupérant data-values pour être sûr d'avoir un tableau
+            
+            // Sauvegarde des dorks (inchangé)
             const dorks = Array.from(querySelect.options)
-                .filter(opt => opt.dataset.values) // on ne prend que les options avec des dorks
+                .filter(opt => opt.dataset.values)
                 .map(opt => ({
                     label: opt.textContent,
                     value: (() => {
                         try {
                             return JSON.parse(opt.dataset.values);
                         } catch (error) {
-                            // En cas d'erreur, on encapsule la valeur dans un tableau
                             return [opt.dataset.values];
                         }
                     })()
                 }));
-        
+            
             localStorage.setItem('searchHistory', JSON.stringify(links));
             localStorage.setItem('dorksList', JSON.stringify(dorks));
         }
@@ -498,19 +503,19 @@
         function loadFromLocalStorage() {
             const savedLinks = localStorage.getItem('searchHistory');
             const savedDorks = localStorage.getItem('dorksList');
-        
+            
             if (savedLinks) {
                 const links = JSON.parse(savedLinks);
-                linksList.innerHTML = ""; // Réinitialiser la liste
-                links.forEach(link => addLink(link.label, link.url));
+                linksList.innerHTML = "";
+                links.forEach(link => addLink(link.label, link.url, link.query));
             }
-        
+            
             if (savedDorks) {
                 const dorks = JSON.parse(savedDorks);
-                // On encapsule dans un groupe avec une catégorie par défaut
                 populateSelect([{ category: "Dorks sauvegardés", dorks }]);
             }
         }
+
 
         document.getElementById("search-form").addEventListener("submit", (event) => {
             event.preventDefault();
@@ -525,23 +530,26 @@
             const mode = document.querySelector('input[name="mode"]:checked').value;
             
             if (mode === "all") {
-                // Ouvrir tous les onglets avec un léger délai pour contourner les bloqueurs de pop-ups
                 values.forEach((value, index) => {
                     const finalQuery = injectTargetIntoDork(value, target);
                     const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
+                    // Ajoute dans l'historique avec la requête exacte en tooltip
+                    addLink(`Recherche ${index + 1} (${selectedOption.textContent})${target ? " - " + target : ""}`, searchURL, finalQuery);
                     setTimeout(() => {
                         window.open(searchURL, "_blank");
-                    }, index * 100); // 100 ms de décalage
+                    }, index * 100);
                 });
             } else if (mode === "select") {
-                // Ouvrir uniquement l'onglet correspondant à la value sélectionnée
                 const selectedIndex = document.getElementById("single-value-select").value;
                 const value = values[selectedIndex];
                 const finalQuery = injectTargetIntoDork(value, target);
                 const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
+                addLink(`Recherche (${selectedOption.textContent})${target ? " - " + target : ""}`, searchURL, finalQuery);
                 window.open(searchURL, "_blank");
             }
         });
+
+
 
         importConfigButton.addEventListener("click", () => {
             importMethodPopup.style.display = "flex";
