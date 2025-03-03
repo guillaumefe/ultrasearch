@@ -482,25 +482,26 @@
         document.getElementById("search-form").addEventListener("submit", (event) => {
             event.preventDefault();
             const selectedOption = querySelect.options[querySelect.selectedIndex];
-            
-            // Récupération et parsing du dataset
+        
             let values;
             try {
                 values = JSON.parse(selectedOption.dataset.values);
             } catch (error) {
-                // En cas d'erreur, on encapsule la valeur dans un tableau
                 values = [selectedOption.dataset.values];
             }
-            
+        
             const target = document.getElementById("target").value;
-            
-            // Itération sur toutes les valeurs pour lancer les recherches
-            values.forEach(value => {
+        
+            // Itération sur chaque valeur avec un délai pour éviter le blocage des pop-ups
+            values.forEach((value, index) => {
                 const finalQuery = injectTargetIntoDork(value, target);
                 const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
-                window.open(searchURL, "_blank");
+                setTimeout(() => {
+                    window.open(searchURL, "_blank");
+                }, index * 100); // 100 ms de décalage entre chaque ouverture
             });
         });
+
 
 
         importConfigButton.addEventListener("click", () => {
