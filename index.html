@@ -292,6 +292,21 @@
                 padding: 0.8rem;
             }
         }
+        .mode-options {
+          background: #f7f7f7; /* Couleur de fond légèrement différente */
+          padding: 0.5rem;
+          border-radius: 8px;
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+        }
+        .mode-options label {
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
     </style>
 </head>
 <body>
@@ -307,6 +322,25 @@
 
             <div class="form-group">
                 <label for="target">Cible de recherche</label>
+                
+                <div class="form-group mode-options">
+                  <label style="margin-right: 1rem;">Mode de lancement :</label>
+                  <label for="mode-all">
+                    <input type="radio" id="mode-all" name="mode" value="all" checked>
+                    Ouvrir tous les onglets
+                    <span title="Attention : vous devez autoriser les pop-ups pour ce domaine"></span>
+                  </label>
+                  <label for="mode-select">
+                    <input type="radio" id="mode-select" name="mode" value="select">
+                    Sélectionner une value
+                  </label>
+                </div>
+                <!-- Ce conteneur sera affiché uniquement en mode "Sélectionner une value" -->
+                <div class="form-group" id="single-value-container" style="display:none;">
+                  <label for="single-value-select">Choisissez la value à lancer :</label>
+                  <select id="single-value-select"></select>
+                </div>
+
                 <input type="text" id="target" name="target" placeholder="Entrez votre cible..." required>
             </div>
 
@@ -478,31 +512,36 @@
             }
         }
 
-
         document.getElementById("search-form").addEventListener("submit", (event) => {
             event.preventDefault();
             const selectedOption = querySelect.options[querySelect.selectedIndex];
-        
             let values;
             try {
                 values = JSON.parse(selectedOption.dataset.values);
             } catch (error) {
                 values = [selectedOption.dataset.values];
             }
-        
             const target = document.getElementById("target").value;
-        
-            // Itération sur chaque valeur avec un délai pour éviter le blocage des pop-ups
-            values.forEach((value, index) => {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            
+            if (mode === "all") {
+                // Ouvrir tous les onglets avec un léger délai pour contourner les bloqueurs de pop-ups
+                values.forEach((value, index) => {
+                    const finalQuery = injectTargetIntoDork(value, target);
+                    const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
+                    setTimeout(() => {
+                        window.open(searchURL, "_blank");
+                    }, index * 100); // 100 ms de décalage
+                });
+            } else if (mode === "select") {
+                // Ouvrir uniquement l'onglet correspondant à la value sélectionnée
+                const selectedIndex = document.getElementById("single-value-select").value;
+                const value = values[selectedIndex];
                 const finalQuery = injectTargetIntoDork(value, target);
                 const searchURL = `https://www.google.com/search?q=${encodeURIComponent(finalQuery)}`;
-                setTimeout(() => {
-                    window.open(searchURL, "_blank");
-                }, index * 100); // 100 ms de décalage entre chaque ouverture
-            });
+                window.open(searchURL, "_blank");
+            }
         });
-
-
 
         importConfigButton.addEventListener("click", () => {
             importMethodPopup.style.display = "flex";
@@ -649,6 +688,43 @@
             a.click();
             URL.revokeObjectURL(url);
         }
+        
+        function updateSingleValueSelect() {
+            const singleValueSelect = document.getElementById("single-value-select");
+            singleValueSelect.innerHTML = ""; // Réinitialiser la liste
+            const selectedOption = querySelect.options[querySelect.selectedIndex];
+            let values;
+            try {
+                values = JSON.parse(selectedOption.dataset.values);
+            } catch (e) {
+                values = [selectedOption.dataset.values];
+            }
+            // Pour chaque valeur, afficher la chaîne de caractère réelle
+            values.forEach((value, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = value; // Affichage de la value elle-même
+                singleValueSelect.appendChild(option);
+            });
+        }
+
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener("change", function() {
+                const mode = document.querySelector('input[name="mode"]:checked').value;
+                if (mode === "select") {
+                    document.getElementById("single-value-container").style.display = "block";
+                    updateSingleValueSelect();
+                } else {
+                    document.getElementById("single-value-container").style.display = "none";
+                }
+            });
+        });
+                
+        querySelect.addEventListener("change", function(){
+            if(document.querySelector('input[name="mode"]:checked').value === "select") {
+                updateSingleValueSelect();
+            }
+        });
 
         window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
     </script>
